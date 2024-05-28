@@ -1,0 +1,3 @@
+/Users/jialing/Documents/github/json-parser/build/CMakeFiles/JsonParser.dir
+/Users/jialing/Documents/github/json-parser/build/CMakeFiles/edit_cache.dir
+/Users/jialing/Documents/github/json-parser/build/CMakeFiles/rebuild_cache.dir
