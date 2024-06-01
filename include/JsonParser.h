@@ -3,14 +3,10 @@
 #include <map>
 #include <vector>
 #include <variant>
+#include <string_view>
+#include <algorithm>
 
-
-#define PRINT_POS_AND_VAR(var) \
-    std::cout << "File: " << __FILE__ \
-              << ", Line: " << __LINE__ \
-              << ", Function: " << __func__ \
-              << ", Variable: " << var << std::endl
-
+using namespace std::literals;
 struct JsonArray;
 struct JsonObject;
 
@@ -56,7 +52,7 @@ public:
     }
 
 private:
-    const std::string& json_;
+    const std::string_view json_;
     size_t pos_;
 
     void skipWhitespace() {
@@ -70,9 +66,9 @@ private:
         if (pos_ >= json_.size()) throw std::runtime_error("Unexpected end of input");
 
         switch (json_[pos_]) {
-            case 'n': return parseLiteral("null", nullptr);
-            case 't': return parseLiteral("true", true);
-            case 'f': return parseLiteral("false", false);
+            case 'n': return parseLiteral("null"sv, nullptr);
+            case 't': return parseLiteral("true"sv, true);
+            case 'f': return parseLiteral("false"sv, false);
             case '"': return parseString();
             case '[': return parseArray();
             case '{': return parseObject();
@@ -80,7 +76,7 @@ private:
         }
     }
 
-    JsonValue parseLiteral(const std::string& literal, JsonValue value) {
+    JsonValue parseLiteral(const std::string_view& literal, JsonValue value) {
         if (json_.compare(pos_, literal.size(), literal) == 0) {
             pos_ += literal.size();
             return value;
@@ -122,8 +118,8 @@ private:
         while (pos_ < json_.size() && (std::isdigit(json_[pos_]) || json_[pos_] == '.' || json_[pos_] == '-')) {
             ++pos_;
         }
-        std::string num_str = json_.substr(start_pos, pos_ - start_pos);
-        return std::stod(num_str);
+        std::string_view num_str = json_.substr(start_pos, pos_ - start_pos);
+        return std::stod(std::string(num_str));
     }
 
     JsonValue parseArray() {
