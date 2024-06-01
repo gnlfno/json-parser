@@ -1,5 +1,5 @@
 #include "JsonParser.h"
-
+#include <iterator>
 
 
 /*
@@ -26,9 +26,15 @@ example
 	“NestedArrayProperty”: [10,20,true,40]
 }
 */
+
+std::string getStringFromStd(){
+	std::istreambuf_iterator<char> begin(std::cin), end;
+	return std::string(begin, end);
+}
+
 int main() {
-    std::string jsonString = R"({"name": "John", "age": 30, "isStudent": false, "courses": ["Math", "Science"]})";
-    JsonParser parser(jsonString);
+    std::string jsonString = getStringFromStd();
+	JsonParser parser(jsonString);
     JsonValue jsonValue = parser.parse();
 
     printJsonValue(jsonValue);
